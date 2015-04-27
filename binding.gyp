@@ -1,8 +1,13 @@
 {
- "targets": [
-  {
-   "target_name": "shm_addon",
-   "sources": ["shm_addon.cpp"]
-  }
- ]
+  "targets": [
+    {
+      "target_name": "shm-buffer",
+      "sources": [
+        "src/shm-buffer.cc"
+      ],
+      "include_dirs": [
+        "<!(node -e \"require('nan')\")"
+      ]
+    }
+  ]
 }

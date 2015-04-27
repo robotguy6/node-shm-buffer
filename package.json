@@ -1,0 +1,26 @@
+{
+  "name": "node-shm-buffer",
+  "version": "0.0.1",
+  "description": "Access shared memory using a node buffer",
+  "main": "index.js",
+  "dependencies": {
+    "bindings": "^1.2.1",
+    "nan": "^1.8.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-gyp rebuild"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lpetre/node-shm-buffer.git"
+  },
+  "author": "Luke Petre <lpetre@gmail.com>",
+  "license": "MIT",
+  "gypfile": true,
+  "bugs": {
+    "url": "https://github.com/lpetre/node-shm-buffer/issues"
+  },
+  "homepage": "https://github.com/lpetre/node-shm-buffer"
+}
