@@ -65,13 +65,13 @@ NAN_METHOD(shmop_open) {
   }
 
   int key      = args[0]->Int32Value();
-  char *flags  = *(String::Utf8Value(args[1]->ToString()));
+  uint16_t flag  = **(String::Value(args[1]));
   int shmflg   = args[2]->Int32Value();
   int shmatflg = 0;
   int size     = 0;
   struct shmid_ds shm;
 
-  switch (flags[0])
+  switch (flag)
   {
     case 'a':
       shmatflg |= SHM_RDONLY;
