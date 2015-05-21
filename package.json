@@ -1,6 +1,6 @@
 {
   "name": "node-shm-buffer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Access shared memory using a node buffer",
   "main": "index.js",
   "dependencies": {
