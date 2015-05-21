@@ -49,6 +49,7 @@ NAN_METHOD(shmop_delete) {
     return NanThrowErrno(errno, "shmctl", "can't mark segment for deletion (are you the owner?)");
   }
 
+  NanReturnUndefined();
 }
 
 /* {{{ proto int shmop_open (int key, string flags, int mode, int size)

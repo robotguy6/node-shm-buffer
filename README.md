@@ -22,7 +22,7 @@ shared memory segment bindings for node.js that work in 0.10+
     <td><ul>
         <li>"a" for access (sets SHM_RDONLY for shmat) use this flag when you need to open an existing shared memory segment for read only</li>
         <li>"c" for create (sets IPC_CREATE) use this flag when you need to create a new shared memory segment or if a segment with the same key exists, try to open it for read and write</li>
-        <li>"w" for read & write access use this flag when you need to read and write to a shared memory segment, use this flag in most cases.</li>
+        <li>"w" for read &amp; write access use this flag when you need to read and write to a shared memory segment, use this flag in most cases.</li>
         <li>"n" create a new memory segment (sets IPC_CREATE|IPC_EXCL) use this flag when you want to create a new shared memory segment but if one already exists with the same flag, fail. This is useful for security purposes, using this you can prevent race condition exploits.</li>
   </tr>
   <tr>
