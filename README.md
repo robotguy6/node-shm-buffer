@@ -4,11 +4,11 @@ shared memory segment bindings for node.js that work in 0.10+
 
 ## Installing
 
-    npm install shm-buffer
+    npm install node-shm-buffer
 
 ## Usage
 
-    shm = require("shm-buffer")
+    shm = require("node-shm-buffer")
     buffer = shm.open(key, flags, mode, size)
     buffer.delete() // deletes the shared memory region
 
