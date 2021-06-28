@@ -16,18 +16,7 @@ static Persistent<String> shmid_symbol;
 static Persistent<String> delete_symbol;
 static Persistent<String> buffer_symbol;
 
-#if (NODE_MODULE_VERSION < NODE_0_12_MODULE_VERSION)
-NAN_INLINE v8::Local<v8::Value> NanThrowErrno(int errorno,
-                                              const char *syscall = NULL,
-                                              const char *msg = "",
-                                              const char *path = NULL) {
-  do {
-    NanScope();
-    return v8::Local<v8::Value>::New(node::ErrnoException(errorno, syscall, msg, path));
-  } while (0);
-}
-#else
-NAN_INLINE void NanThrowErrno(int errorno,
+V8_INLINE void NanThrowErrno(int errorno,
                               const char *syscall = NULL,
                               const char *msg = "",
                               const char *path = NULL) {
@@ -36,7 +25,6 @@ NAN_INLINE void NanThrowErrno(int errorno,
     v8::Isolate::GetCurrent()->ThrowException(node::ErrnoException(errorno, syscall, msg, path));
   } while (0);
 }
-#endif
 
 /* {{{ proto bool shmop_delete ()
    mark segment for deletion */
