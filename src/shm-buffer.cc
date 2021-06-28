@@ -10,23 +10,36 @@
 #include <string>
 #include <errno.h>
 
-/*
 using namespace v8;
 
 static Persistent<String> shmid_symbol;
 static Persistent<String> delete_symbol;
 static Persistent<String> buffer_symbol;
 
-V8_INLINE void NanThrowErrno(int errorno,
+#if (NODE_MODULE_VERSION < NODE_0_12_MODULE_VERSION)
+NAN_INLINE v8::Local<v8::Value> NanThrowErrno(int errorno,
+                                              const char *syscall = NULL,
+                                              const char *msg = "",
+                                              const char *path = NULL) {
+  do {
+    NanScope();
+    return v8::Local<v8::Value>::New(node::ErrnoException(errorno, syscall, msg, path));
+  } while (0);
+}
+#else
+NAN_INLINE void NanThrowErrno(int errorno,
                               const char *syscall = NULL,
                               const char *msg = "",
                               const char *path = NULL) {
   do {
-    Nan::Scope();
+    NanScope();
     v8::Isolate::GetCurrent()->ThrowException(node::ErrnoException(errorno, syscall, msg, path));
   } while (0);
 }
+#endif
 
+/* {{{ proto bool shmop_delete ()
+   mark segment for deletion */
 NAN_METHOD(shmop_delete) {
   NanScope();
 
@@ -39,6 +52,8 @@ NAN_METHOD(shmop_delete) {
   NanReturnUndefined();
 }
 
+/* {{{ proto int shmop_open (int key, string flags, int mode, int size)
+gets and attaches a shared memory segment */
 NAN_METHOD(shmop_open) {
   NanScope();
 
@@ -71,6 +86,10 @@ NAN_METHOD(shmop_open) {
       size = args[3]->Int32Value();
       break;
     case 'w':
+      /* noop
+        shm segment is being opened for read & write
+        will fail if segment does not exist
+      */
       break;
     default:
       return NanThrowTypeError("invalid access mode");
@@ -123,4 +142,3 @@ void init(Handle<Object> exports) {
 }
 
 NODE_MODULE(shm_buffer, init)
-*/
