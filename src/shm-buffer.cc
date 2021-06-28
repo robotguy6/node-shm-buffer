@@ -1,7 +1,7 @@
 
 #include <v8.h>
 #include <node.h>
-#include <nan.h>
+//#include <nan.h>
 #include <node_buffer.h>
 #include <iostream>
 #include <sys/types.h>
