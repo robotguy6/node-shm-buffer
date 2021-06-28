@@ -54,12 +54,12 @@ NAN_METHOD(shmop_open) {
       !info[1]->IsString() || 
       !info[2]->IsInt32() || 
       !info[3]->IsInt32()) {
-      Nan:ThrowError("open() takes 4 arguments: int key, string flags, int mode, int size.");
+      Nan::ThrowError("open() takes 4 arguments: int key, string flags, int mode, int size.");
   }
 
-  int key      = NanTo<int32_t>(info[0]);
+  int key      = Nan::To<int32_t>(info[0]).ToChecked();
   uint16_t flag  = **(String::Value(info[1]));
-  int shmflg   = NanTo<int32_t>(info[2]);
+  int shmflg   = Nan::To<int32_t>(info[2]).ToChecked();
   int shmatflg = 0;
   int size     = 0;
   struct shmid_ds shm;
