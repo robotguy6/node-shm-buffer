@@ -107,17 +107,16 @@ NAN_METHOD(shmop_open) {
 
   Handle<Object> slowBuffer = NanNewBufferHandle((char*)addr, shm.shm_segsz);    
 
-  Handle<Object> globalObj = NanGetCurrentContext()->Global();
-  Handle<Function> bufferConstructor = Handle<Function>::Cast(
-      NanGet(globalObj, NanNew(buffer_symbol)));
+  Handle<Object> globalObj = Nan::GetCurrentContext()->Global();
+  Handle<Function> bufferConstructor = Handle<Function>::Cast(Nan::Get(globalObj, Nan::New(buffer_symbol)));
   Handle<Value> consArgs[3] = {
     slowBuffer,
-    NanNew<Number>(::node::Buffer::Length(slowBuffer)),
-    NanNew<Number>(0)
+    Nan::New<Number>(::node::Buffer::Length(slowBuffer)),
+    Nan::New<Number>(0)
   };
-  Handle<Object> fastBuffer = NanNewInstance(bufferConstructor3, consArgs);
-  NanSet(fastBuffer, NanNew(shmid_symbol), NanNew(shmid));
-  NanSet(fastBuffer, NanNew(delete_symbol ), NanGetFunction(NanNew<FunctionTemplate>(shmop_delete)));
+  Handle<Object> fastBuffer = Nan::NewInstance(bufferConstructor3, consArgs);
+  Nan::Set(fastBuffer, Nan::New(shmid_symbol), Nan::New(shmid));
+  Nan::Set(fastBuffer, Nan::New(delete_symbol ), Nan::GetFunction(Nan::New<FunctionTemplate>(shmop_delete)));
 
   info.GetReturnValue().Set(fastBuffer);
 }
@@ -126,11 +125,11 @@ NAN_METHOD(shmop_open) {
 void init(Handle<Object> exports) {
   NanScope scope;
 
-  shmid_symbol.Reset(NanNew<String>("shmid").ToLocalChecked());
-  delete_symbol.Reset(NanNew<String>("delete").ToLocalChecked());
-  buffer_symbol.Reset(NanNew<String>("Buffer").ToLocalChecked());
+  shmid_symbol.Reset(Nan::New<String>("shmid").ToLocalChecked());
+  delete_symbol.Reset(Nan::New<String>("delete").ToLocalChecked());
+  buffer_symbol.Reset(Nan::New<String>("Buffer").ToLocalChecked());
 
-  NanSet(exports, NanNew("open").ToLocalChecked(), NanGetFunction(NanNew<FunctionTemplate>(shmop_open)));
+  Nan::Set(exports, Nan::New("open").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(shmop_open)));
 }
 
 NODE_MODULE(shm_buffer, init)
