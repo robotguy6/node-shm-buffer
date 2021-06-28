@@ -125,7 +125,7 @@ NAN_METHOD(shmop_open) {
 
 
 //void init(Handle<Object> exports) {
-NAN_MODULE_INIT(Initialize){
+NAN_MODULE_INIT(init){
   
   shmid_symbol.Reset(Nan::New<String>("shmid").ToLocalChecked());
   delete_symbol.Reset(Nan::New<String>("delete").ToLocalChecked());
