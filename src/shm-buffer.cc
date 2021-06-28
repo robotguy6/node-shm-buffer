@@ -41,10 +41,8 @@ NAN_INLINE void NanThrowErrno(int errorno,
 NAN_METHOD(shmop_delete) {
   Local<Value> shmid = Nan::Get(info[0], Nan::New(shmid_symbol)).ToLocalChecked();
   if (shmctl(Nan::To<int32_t>(shmid).ToChecked(), IPC_RMID, NULL)) {
-    return Nan::ErrnoException(errno, "shmctl", "can't mark segment for deletion (are you the owner?)");
+     Nan::ThrowError(Nan::ErrnoException(errno, "shmctl", "can't mark segment for deletion (are you the owner?)"));
   }
-
-  return;
 }
 
 /* {{{ proto int shmop_open (int key, string flags, int mode, int size)
@@ -56,7 +54,7 @@ NAN_METHOD(shmop_open) {
       !info[1]->IsString() || 
       !info[2]->IsInt32() || 
       !info[3]->IsInt32()) {
-    return NanThrowTypeError("open() takes 4 arguments: int key, string flags, int mode, int size.");
+      Nan:ThrowError("open() takes 4 arguments: int key, string flags, int mode, int size.");
   }
 
   int key      = NanTo<int32_t>(info[0]);
