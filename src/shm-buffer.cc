@@ -11,9 +11,9 @@
 
 using namespace v8;
 
-static NanPersistent<String> shmid_symbol;
-static NanPersistent<String> delete_symbol;
-static NanPersistent<String> buffer_symbol;
+static Nan::Persistent<String> shmid_symbol;
+static Nan::Persistent<String> delete_symbol;
+static Nan::Persistent<String> buffer_symbol;
 
 #if (NODE_MODULE_VERSION < NODE_0_12_MODULE_VERSION)
 NAN_INLINE v8::Local<v8::Value> NanThrowErrno(int errorno,
