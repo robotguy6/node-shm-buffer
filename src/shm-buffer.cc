@@ -58,7 +58,7 @@ NAN_METHOD(shmop_open) {
   }
 
   int key      = Nan::To<int32_t>(info[0]).ToChecked();
-  uint16_t flag  = **(String::Value(info[1]));
+  uint16_t flag  = **(String::Value(v8::Isolate::GetCurrent(), info[1]));
   int shmflg   = Nan::To<int32_t>(info[2]).ToChecked();
   int shmatflg = 0;
   int size     = 0;
@@ -105,6 +105,7 @@ NAN_METHOD(shmop_open) {
       Nan::ThrowError(Nan::ErrnoException(errno, "shmat", "unable to attach to shared memory segment"));
   }
 
+  /*
   Handle<Object> slowBuffer = NanNewBufferHandle((char*)addr, shm.shm_segsz);    
 
   Handle<Object> globalObj = Nan::GetCurrentContext()->Global();
@@ -119,6 +120,7 @@ NAN_METHOD(shmop_open) {
   Nan::Set(fastBuffer, Nan::New(delete_symbol ), Nan::GetFunction(Nan::New<FunctionTemplate>(shmop_delete)));
 
   info.GetReturnValue().Set(fastBuffer);
+  */
 }
 
 
