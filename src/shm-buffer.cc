@@ -1,7 +1,7 @@
 
 #include <v8.h>
 #include <node.h>
-//#include <nan.h>
+#include <nan.h>
 #include <node_buffer.h>
 #include <iostream>
 #include <sys/types.h>
@@ -10,6 +10,7 @@
 #include <string>
 #include <errno.h>
 
+/*
 using namespace v8;
 
 static Persistent<String> shmid_symbol;
@@ -21,13 +22,11 @@ V8_INLINE void NanThrowErrno(int errorno,
                               const char *msg = "",
                               const char *path = NULL) {
   do {
-    NanScope();
+    Nan::Scope();
     v8::Isolate::GetCurrent()->ThrowException(node::ErrnoException(errorno, syscall, msg, path));
   } while (0);
 }
 
-/* {{{ proto bool shmop_delete ()
-   mark segment for deletion */
 NAN_METHOD(shmop_delete) {
   NanScope();
 
@@ -40,8 +39,6 @@ NAN_METHOD(shmop_delete) {
   NanReturnUndefined();
 }
 
-/* {{{ proto int shmop_open (int key, string flags, int mode, int size)
-gets and attaches a shared memory segment */
 NAN_METHOD(shmop_open) {
   NanScope();
 
@@ -74,10 +71,6 @@ NAN_METHOD(shmop_open) {
       size = args[3]->Int32Value();
       break;
     case 'w':
-      /* noop
-        shm segment is being opened for read & write
-        will fail if segment does not exist
-      */
       break;
     default:
       return NanThrowTypeError("invalid access mode");
@@ -130,3 +123,4 @@ void init(Handle<Object> exports) {
 }
 
 NODE_MODULE(shm_buffer, init)
+*/
