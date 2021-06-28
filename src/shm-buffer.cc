@@ -131,7 +131,7 @@ NAN_MODULE_INIT(init){
   delete_symbol.Reset(Nan::New<String>("delete").ToLocalChecked());
   buffer_symbol.Reset(Nan::New<String>("Buffer").ToLocalChecked());
 
-  Nan::Export(target, "open", shmop_open);
+  //Nan::Export(target, "open", shmop_open);
 }
 
 NODE_MODULE(shm_buffer, init)
