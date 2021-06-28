@@ -126,13 +126,12 @@ NAN_METHOD(shmop_open) {
 
 //void init(Handle<Object> exports) {
 NAN_MODULE_INIT(Initialize){
-  NanScope scope;
-
+  
   shmid_symbol.Reset(Nan::New<String>("shmid").ToLocalChecked());
   delete_symbol.Reset(Nan::New<String>("delete").ToLocalChecked());
   buffer_symbol.Reset(Nan::New<String>("Buffer").ToLocalChecked());
 
-  Nan::Set(target, Nan::New("open").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(shmop_open)));
+  Nan::Export(target, "open", shmop_open);
 }
 
 NODE_MODULE(shm_buffer, init)
