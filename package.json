@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "bindings": "^1.2.1",
-    "nan": "^1.8.4"
+    "nan": "*"
   },
   "devDependencies": {},
   "scripts": {
@@ -14,13 +14,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lpetre/node-shm-buffer.git"
+    "url": "https://github.com/robotguy6/node-shm-buffer.git"
   },
   "author": "Luke Petre <lpetre@gmail.com>",
   "license": "MIT",
   "gypfile": true,
   "bugs": {
-    "url": "https://github.com/lpetre/node-shm-buffer/issues"
+    "url": "https://github.com/robotguy6/node-shm-buffer/issues"
   },
-  "homepage": "https://github.com/lpetre/node-shm-buffer"
+  "homepage": "https://github.com/robotguy6/node-shm-buffer"
 }
