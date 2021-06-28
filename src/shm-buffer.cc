@@ -32,7 +32,7 @@ NAN_INLINE void NanThrowErrno(int errorno,
                               const char *msg = "",
                               const char *path = NULL) {
   do {
-    NanScope();
+    Nan::Scope();
     v8::Isolate::GetCurrent()->ThrowException(node::ErrnoException(errorno, syscall, msg, path));
   } while (0);
 }
@@ -41,21 +41,21 @@ NAN_INLINE void NanThrowErrno(int errorno,
 /* {{{ proto bool shmop_delete ()
    mark segment for deletion */
 NAN_METHOD(shmop_delete) {
-  NanScope();
+  Nan::Scope();
 
 
-  Local<Value> shmid = args.This()->Get(NanNew(shmid_symbol));
+  Local<Value> shmid = args.This()->Get(Nan::New(shmid_symbol));
   if (shmctl(shmid->Int32Value(), IPC_RMID, NULL)) {
     return NanThrowErrno(errno, "shmctl", "can't mark segment for deletion (are you the owner?)");
   }
 
-  NanReturnUndefined();
+  Nan::ReturnUndefined();
 }
 
 /* {{{ proto int shmop_open (int key, string flags, int mode, int size)
 gets and attaches a shared memory segment */
 NAN_METHOD(shmop_open) {
-  NanScope();
+  Nan::Scope();
 
   if (args.Length() != 4 ||
       !args[0]->IsInt32() || 
