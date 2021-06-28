@@ -41,10 +41,10 @@ NAN_INLINE void NanThrowErrno(int errorno,
 NAN_METHOD(shmop_delete) {
   Local<Value> shmid = Nan::Get(info[0], Nan::New(shmid_symbol)).ToLocalChecked();
   if (shmctl(Nan::To<int32_t>(shmid).ToChecked(), IPC_RMID, NULL)) {
-    return Nan::ThrowErrno(errno, "shmctl", "can't mark segment for deletion (are you the owner?)");
+    return Nan::ErrnoException(errno, "shmctl", "can't mark segment for deletion (are you the owner?)");
   }
 
-  Nan::ReturnUndefined();
+  return;
 }
 
 /* {{{ proto int shmop_open (int key, string flags, int mode, int size)
