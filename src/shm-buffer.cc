@@ -39,7 +39,7 @@ NAN_INLINE void NanThrowErrno(int errorno,
 /* {{{ proto bool shmop_delete ()
    mark segment for deletion */
 NAN_METHOD(shmop_delete) {
-  Local<Value> shmid = Nan::Get(info[0], Nan::New(shmid_symbol)).ToLocal();
+  Local<Value> shmid = Nan::Get(info[0], Nan::New(shmid_symbol)).ToLocalChecked();
   if (shmctl(Nan::To<int32_t>(shmid), IPC_RMID, NULL)) {
     return Nan::ThrowErrno(errno, "shmctl", "can't mark segment for deletion (are you the owner?)");
   }
