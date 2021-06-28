@@ -71,11 +71,11 @@ NAN_METHOD(shmop_open) {
       break;
     case 'c':
       shmflg |= IPC_CREAT;
-      size = NanTo<int32_t>(info[3]);;
+      size = Nan::To<int32_t>(info[3]).ToChecked();
       break;
     case 'n':
       shmflg |= (IPC_CREAT | IPC_EXCL);
-      size = NanTo<int32_t>(info[3]);
+      size = Nan::To<int32_t>(info[3]).ToChecked();
       break;
     case 'w':
       /* noop
@@ -84,25 +84,25 @@ NAN_METHOD(shmop_open) {
       */
       break;
     default:
-      return NanThrowTypeError("invalid access mode");
+      Nan::ThrowError("invalid access mode");
   }
 
   if (shmflg & IPC_CREAT && size < 1) {
-    return NanThrowTypeError("Shared memory segment size must be greater than zero");
+     Nan::ThrowError("Shared memory segment size must be greater than zero");
   }
 
   int shmid = shmget(key, size, shmflg);
   if (shmid == -1) {
-    return NanThrowErrno(errno, "shmget", "unable to attach or create shared memory segment");
+      Nan::ThrowError(Nan::ErrnoException(errno, "shmget", "unable to attach or create shared memory segment"));
   }
-
+  
   if (shmctl(shmid, IPC_STAT, &shm)) {
-    return NanThrowErrno(errno, "shmctl", "unable to get shared memory segment information");
+      Nan::ThrowError(Nan::ErrnoException(errno, "shmctl", "unable to get shared memory segment information"));
   }
 
   void *addr = shmat(shmid, 0, shmatflg);
   if (addr == (char*) -1) {
-    return NanThrowErrno(errno, "shmat", "unable to attach to shared memory segment");
+      Nan::ThrowError(Nan::ErrnoException(errno, "shmat", "unable to attach to shared memory segment"));
   }
 
   Handle<Object> slowBuffer = NanNewBufferHandle((char*)addr, shm.shm_segsz);    
