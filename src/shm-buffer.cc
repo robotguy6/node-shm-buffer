@@ -1,4 +1,3 @@
-
 #include <v8.h>
 #include <node.h>
 #include <nan.h>
@@ -12,9 +11,9 @@
 
 using namespace v8;
 
-static Persistent<String> shmid_symbol;
-static Persistent<String> delete_symbol;
-static Persistent<String> buffer_symbol;
+static NanPersistent<String> shmid_symbol;
+static NanPersistent<String> delete_symbol;
+static NanPersistent<String> buffer_symbol;
 
 #if (NODE_MODULE_VERSION < NODE_0_12_MODULE_VERSION)
 NAN_INLINE v8::Local<v8::Value> NanThrowErrno(int errorno,
@@ -22,7 +21,7 @@ NAN_INLINE v8::Local<v8::Value> NanThrowErrno(int errorno,
                                               const char *msg = "",
                                               const char *path = NULL) {
   do {
-    NanScope();
+    NanScope scope;
     return v8::Local<v8::Value>::New(node::ErrnoException(errorno, syscall, msg, path));
   } while (0);
 }
@@ -40,8 +39,8 @@ NAN_INLINE void NanThrowErrno(int errorno,
 /* {{{ proto bool shmop_delete ()
    mark segment for deletion */
 NAN_METHOD(shmop_delete) {
-  Local<Value> shmid = info[0]->Get(Nan::New(shmid_symbol));
-  if (shmctl(shmid->Int32Value(Nan::GetCurrentContext()).FromJust(), IPC_RMID, NULL)) {
+  Local<Value> shmid = NanGet(info[0], Nan::New(shmid_symbol));
+  if (shmctl(NanTo<int32_t>(shmidNan::GetCurrentContext()).FromJust(), IPC_RMID, NULL)) {
     return NanThrowErrno(errno, "shmctl", "can't mark segment for deletion (are you the owner?)");
   }
 
@@ -52,17 +51,17 @@ NAN_METHOD(shmop_delete) {
 gets and attaches a shared memory segment */
 NAN_METHOD(shmop_open) {
 
-  if (args.Length() != 4 ||
-      !args[0]->IsInt32() || 
-      !args[1]->IsString() || 
-      !args[2]->IsInt32() || 
-      !args[3]->IsInt32()) {
+  if (info.Length() != 4 ||
+      !info[0]->IsInt32() || 
+      !info[1]->IsString() || 
+      !info[2]->IsInt32() || 
+      !info[3]->IsInt32()) {
     return NanThrowTypeError("open() takes 4 arguments: int key, string flags, int mode, int size.");
   }
 
-  int key      = args[0]->Int32Value();
-  uint16_t flag  = **(String::Value(args[1]));
-  int shmflg   = args[2]->Int32Value();
+  int key      = NanTo<int32_t>(info[0]);
+  uint16_t flag  = **(String::Value(info[1]));
+  int shmflg   = NanTo<int32_t>(info[2]);
   int shmatflg = 0;
   int size     = 0;
   struct shmid_ds shm;
@@ -74,11 +73,11 @@ NAN_METHOD(shmop_open) {
       break;
     case 'c':
       shmflg |= IPC_CREAT;
-      size = args[3]->Int32Value();;
+      size = NanTo<int32_t>(info[3]);;
       break;
     case 'n':
       shmflg |= (IPC_CREAT | IPC_EXCL);
-      size = args[3]->Int32Value();
+      size = NanTo<int32_t>(info[3]);
       break;
     case 'w':
       /* noop
@@ -112,28 +111,29 @@ NAN_METHOD(shmop_open) {
 
   Handle<Object> globalObj = NanGetCurrentContext()->Global();
   Handle<Function> bufferConstructor = Handle<Function>::Cast(
-      globalObj->Get(NanNew(buffer_symbol)));
+      NanGet(globalObj, NanNew(buffer_symbol)));
   Handle<Value> consArgs[3] = {
     slowBuffer,
     NanNew<Number>(::node::Buffer::Length(slowBuffer)),
     NanNew<Number>(0)
   };
-  Handle<Object> fastBuffer = bufferConstructor->NewInstance(3, consArgs);
-  fastBuffer->Set(NanNew(shmid_symbol), NanNew(shmid));
-  fastBuffer->Set(NanNew(delete_symbol ), NanNew<FunctionTemplate>(shmop_delete)->GetFunction());
+  Handle<Object> fastBuffer = NanNewInstance(bufferConstructor3, consArgs);
+  NanSet(fastBuffer, NanNew(shmid_symbol), NanNew(shmid));
+  NanSet(fastBuffer, NanNew(delete_symbol ), NanGetFunction(NanNew<FunctionTemplate>(shmop_delete)));
 
-  NanReturnValue(fastBuffer);
+  info.GetReturnValue().Set(fastBuffer);
 }
 
 
 void init(Handle<Object> exports) {
-  NanScope();
+  NanScope scope;
 
-  NanAssignPersistent(shmid_symbol, NanNew<String>("shmid"));
-  NanAssignPersistent(delete_symbol, NanNew<String>("delete"));
-  NanAssignPersistent(buffer_symbol, NanNew<String>("Buffer"));
+  shmid_symbol.Reset(NanNew<String>("shmid").ToLocalChecked());
+  delete_symbol.Reset(NanNew<String>("delete").ToLocalChecked());
+  buffer_symbol.Reset(NanNew<String>("Buffer").ToLocalChecked());
 
-  exports->Set(NanNew("open"), NanNew<FunctionTemplate>(shmop_open)->GetFunction());
+  NanSet(exports, NanNew("open").ToLocalChecked(), NanGetFunction(NanNew<FunctionTemplate>(shmop_open)));
 }
 
 NODE_MODULE(shm_buffer, init)
+
